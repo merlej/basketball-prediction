@@ -1,5 +1,8 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
 
 def calculate_rates(years, df, c1, c2):
     rates_list = []
@@ -94,7 +97,36 @@ def rename_columns(df):
             
     return newdf
             
+          
+def get_corr_heat_map(data, ignore_cancelled = True):
+    if ignore_cancelled:
+        data = data[data['is_cancelled'] == 0].drop('is_cancelled', axis = 1)
+    data_to_visualize = data[~data.isin([np.nan, np.inf, -np.inf]).any(1)]
+    # Create Correlation df
+    corr = data_to_visualize.corr()
+    # Plot figsize
+    fig, ax = plt.subplots(figsize=(15, 10))
+    # Generate Color Map
+    colormap = sns.diverging_palette(220, 10, as_cmap=True)
+    # Generate Heat Map, allow annotations and place floats in map
+    sns.heatmap(corr, cmap=colormap, annot=True, fmt=".2f")
+    # Apply xticks
+    plt.xticks(range(len(corr.columns)), corr.columns);
+    # Apply yticks
+    plt.yticks(range(len(corr.columns)), corr.columns)
+    # show plot
+    plt.show()
             
-            
-            
+# Test whether the difference between features for winners and losers is significant         
+def test_for_difference(df1, df2, alt):
+    for c in df1.columns:
+        p1 = df1[c]
+        p2 = df2[c]
+        test = stats.mannwhitneyu(p1, p2, alternative = alt)
+        # print the p-value
+        print('The p-value for the difference between ', c , 'is: ', test[1])
+        
+        
+        
+        
         
