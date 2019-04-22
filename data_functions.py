@@ -43,7 +43,7 @@ def calculate_average(years, df, c1, c2):
     return avg_list
     
     
-def build_df(d_list, years, var):
+def build_df(d_list, years, var, yrs_prior):
     df = pd.DataFrame()
     for i in range(0, len(d_list)-1):
         y = years[i]
@@ -54,13 +54,15 @@ def build_df(d_list, years, var):
     c_list = ['TeamID']
     for y in years[0:len(years)-1]:
         c_list.append(str(y))
+    # name the columns with the year
     df.columns = c_list
+    # stack the data
     df = df.set_index('TeamID').stack().reset_index()
     df.columns = ['TeamID', 'Season', var]
-    df['Season'] = df['Season'].astype(int)+1
+    df['Season'] = df['Season'].astype(int)+yrs_prior
         
     return df
-          
+
             
 def average_score_diff(years, df, c):
     avg_list = []
@@ -125,8 +127,4 @@ def test_for_difference(df1, df2, alt):
         test = stats.mannwhitneyu(p1, p2, alternative = alt)
         # print the p-value
         print('The p-value for the difference between ', c , 'is: ', test[1])
-        
-        
-        
-        
-        
+    
