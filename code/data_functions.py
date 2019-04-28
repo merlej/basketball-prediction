@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+from sklearn.metrics import confusion_matrix
 
 def calculate_rates(years, df, c1, c2):
     rates_list = []
@@ -128,3 +129,17 @@ def test_for_difference(df1, df2, alt):
         # print the p-value
         print('The p-value for the difference between ', c , 'is: ', test[1])
     
+    
+def draw_confusion_matrix(actuals, predicted, actual_labels, predicted_labels):
+    fig, ax = plt.subplots(figsize=(15, 10))
+
+    sns.heatmap(confusion_matrix(actuals, predicted), annot=True,
+                ax=ax);  # annot=True to annotate cells
+
+    # labels, title and ticks
+    ax.set_xlabel('Predicted labels');
+    ax.set_ylabel('True labels');
+    ax.set_title('Confusion Matrix');
+    ax.xaxis.set_ticklabels(actual_labels);
+    ax.yaxis.set_ticklabels(predicted_labels)
+    plt.show()
