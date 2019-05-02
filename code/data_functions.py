@@ -118,7 +118,8 @@ def get_corr_heat_map(data, ignore_cancelled = True):
     # Apply yticks
     plt.yticks(range(len(corr.columns)), corr.columns)
     # show plot
-    plt.show()
+    #plt.show()
+    plt.savefig('correlation_heat_map.png')
             
 # Test whether the difference between features for winners and losers is significant         
 def test_for_difference(df1, df2, alt):
@@ -133,7 +134,7 @@ def test_for_difference(df1, df2, alt):
 def draw_confusion_matrix(actuals, predicted, actual_labels, predicted_labels):
     fig, ax = plt.subplots(figsize=(15, 10))
 
-    sns.heatmap(confusion_matrix(actuals, predicted), annot=True,
+    sns.heatmap(confusion_matrix(actuals, predicted), annot=True, fmt='d',
                 ax=ax);  # annot=True to annotate cells
 
     # labels, title and ticks
